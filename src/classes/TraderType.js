@@ -79,6 +79,17 @@ export default class TraderType
     }
 
     /**
+     * Rename a category in this trader
+     *
+     * @param { number } categoryId
+     * @param { string } newCategoryName
+     */
+     renameCategory( categoryId, newCategoryName ) {
+        let category = this.categories.at( categoryId );
+        category.categoryName = newCategoryName;
+    }
+
+    /**
      * Deletes a category at specified categroy id (index) in this Trader 
      *
      * @param { number } categoryId 
