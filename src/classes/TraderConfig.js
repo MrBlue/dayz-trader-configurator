@@ -41,6 +41,18 @@ export default class TraderConfig
     }
 
     /**
+     * Rename a trader type
+     *
+     * @param { string } typeId
+     * @param { string } name
+     */
+    renameTrader( typeId, name )
+    {
+        let trader = this.types.at( typeId );
+        trader.typeName = name;
+    }
+
+    /**
      * Deletes a trader with the specified id (index)
      * 
      * @param { number } typeId 

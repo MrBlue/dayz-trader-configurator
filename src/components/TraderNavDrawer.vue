@@ -3,7 +3,7 @@
     <div>
 
         <v-navigation-drawer permanent app clipped>
-            
+
             <v-list-item>
 
                 <v-list-item-content>
@@ -56,6 +56,13 @@
                             fas fa-plus
                         </v-icon>
                     </v-btn>
+                    <v-btn fab x-small text color="primary"
+                        @click='(e) => renameTrader(e, item.key, item.name)'
+                        v-if="item.type === 'trader' && (open || item.items.length === 0)">
+                        <v-icon style="font-size:1rem">
+                            fas fa-pen
+                        </v-icon>
+                    </v-btn>
 
                     <boolean-dialog v-if="item.type === 'trader' && open"
                         title="Remove Trader"
@@ -71,6 +78,13 @@
                         </template>
                     </boolean-dialog>
 
+                    <v-btn fab x-small text color="primary"
+                        @click='(e) => renameCategory(e, item.typeId, item.categoryId, item.name)'
+                        v-if="item.type === 'category'">
+                        <v-icon style="font-size:1rem">
+                            fas fa-pen
+                        </v-icon>
+                    </v-btn>
 
                     <boolean-dialog v-if="item.type === 'category'"
                         title="Remove Category"
@@ -106,13 +120,26 @@
 
         </v-navigation-drawer>
 
-        <trader-new-category-dialog 
+        <trader-new-category-dialog
             :showDialog.sync='newCategory.dialog'
             :traderId='newCategory.traderId'
         />
 
+        <trader-rename-category-dialog
+            :showDialog.sync='renameCategoryData.dialog'
+            :traderId='renameCategoryData.traderId'
+            :categoryId='renameCategoryData.categoryId'
+            :oldName='renameCategoryData.oldName'
+        />
+
         <trader-new-trader-dialog
             :showDialog.sync='newTrader.dialog'
+        />
+
+        <trader-rename-trader-dialog
+            :showDialog.sync='renameTraderData.dialog'
+            :traderId='renameTraderData.traderId'
+            :oldName='renameTraderData.oldName'
         />
     </div>
 </template>
@@ -120,7 +147,9 @@
 <script>
 import TraderConfig from '../classes/TraderConfig';
 import TraderNewCategoryDialog from './TraderNewCategoryDialog';
+import TraderRenameCategoryDialog from './TraderRenameCategoryDialog';
 import TraderNewTraderDialog from './TraderNewTraderDialog';
+import TraderRenameTraderDialog from './TraderRenameTraderDialog';
 import TraderExportDialog from './TraderExportDialog';
 
 import { BooleanDialog } from './Dialogs/index';
@@ -134,7 +163,9 @@ export default {
         BooleanDialog,
 
         TraderNewCategoryDialog,
+        TraderRenameCategoryDialog,
         TraderNewTraderDialog,
+        TraderRenameTraderDialog,
         TraderExportDialog
     },
 
@@ -147,8 +178,21 @@ export default {
                 traderId: -1
             },
 
+            renameCategoryData: {
+                dialog: false,
+                traderId: -1,
+                categoryId: -1,
+                oldName: ''
+            },
+
             newTrader: {
                 dialog: false
+            },
+
+            renameTraderData: {
+                dialog: false,
+                traderId: -1,
+                oldName: ''
             }
         }
     },
@@ -225,6 +269,17 @@ export default {
         },
 
         /**
+         * Renames a category
+         */
+        renameCategory(event, traderId, categoryId, oldName) {
+            event.stopPropagation();
+            this.renameCategoryData.traderId = traderId;
+            this.renameCategoryData.categoryId = categoryId;
+            this.renameCategoryData.oldName = oldName;
+            this.renameCategoryData.dialog = true;
+        },
+
+        /**
          * Deletes a category
          */
         deleteCategory(typeId, categoryId) {
@@ -239,6 +294,17 @@ export default {
          */
         createTrader() {
             this.newTrader.dialog = true;
+        },
+
+        /**
+         * Renames a trader
+         */
+        renameTrader(event, traderId, oldName) {
+            console.log(oldName);
+            event.stopPropagation();
+            this.renameTraderData.traderId = traderId;
+            this.renameTraderData.oldName = oldName;
+            this.renameTraderData.dialog = true;
         },
 
         /**
