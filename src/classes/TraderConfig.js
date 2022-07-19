@@ -82,6 +82,6 @@ export default class TraderConfig
 
         return TraderConfig.extractConfigHead( this.rawConfig ) 
             + formattedTypes
-            + "<FileEnd>";
+            + "\n<FileEnd>";
     }
 }

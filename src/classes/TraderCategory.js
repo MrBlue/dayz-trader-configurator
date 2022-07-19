@@ -58,7 +58,7 @@ export default class TraderCategory
      */
     static loadEntries( rawCategory )
     {
-        let matches = rawCategory.match(/(.*)\n/g);
+        let matches = rawCategory.match(/(.*)/g);
 
         // Remove whitespace from each match
         matches.map( match => match.trim() );
